@@ -14,7 +14,7 @@
 </style>
 </head>
 <body>
-<div class="app"><main class="screen">
+<div class="app"><main id="app" class="screen">
 <section id="login" class="screen"><div class="brand"><div class="logo">ÉTER</div><div class="sub">Jugá cerca. Sin depender de Internet.</div></div><div class="card stack"><div class="label">Tu identidad de juego</div><input id="name" class="input" maxlength="18" placeholder="Nombre o alias" autocomplete="nickname"><button id="loginBtn" class="btn">ENTRAR A ÉTER</button><div class="hint">El perfil inicial se guarda en este dispositivo. La partida está diseñada para funcionar sin Internet una vez descargada.</div></div><div class="footer">Éter v0.2 · prototipo jugable</div></section>
 <section id="lobby" class="screen hidden"><div class="top"><div class="brandmini">ÉTER</div><div id="userPill" class="pill"></div></div><div class="card stack"><div><div class="label">Nueva partida</div><h2>Elegí cómo entrar</h2></div><button id="createBtn" class="btn">CREAR PARTIDA</button><button id="joinBtn" class="btn secondary">UNIRME A UNA PARTIDA</button><div id="joinBox" class="stack hidden"><input id="room" class="input" maxlength="6" placeholder="Código de sala (ej. A7K2Q9)"><button id="confirmJoin" class="btn green">UNIRME</button></div></div><div class="card stack"><div class="label">Modo</div><div class="hint">Partida de proximidad · Buscador vs. Escondido</div></div><button id="logout" class="btn secondary">Cambiar jugador</button><div class="footer">100 Éter · 3 poderes por rol</div></section>
 <section id="role" class="screen hidden"><div class="top"><div class="brandmini">ÉTER</div><div id="roomPill" class="pill"></div></div><div class="card stack"><div><div class="label">Partida lista</div><h2>Elegí tu rol</h2><div id="roleHint" class="hint">Podés cambiarlo antes de comenzar.</div></div><div class="roles"><button class="role" data-role="hidden"><b>◈ Escondido</b><small>Campo de fuerza · Desaparición · Señuelo</small></button><button class="role" data-role="seeker"><b>◎ Buscador</b><small>Radar · Visión · Pulso</small></button></div><button id="startBtn" class="btn" disabled>COMENZAR</button></div></section>
@@ -22,17 +22,17 @@
 </main></div>
 <script>
 const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
-const state={name:localStorage.getItem('eter_name')||'',room:'',role:'',energy:100,game:false};
+const state={name:localStorage.getItem('eter_name')||'',room:'',role:'',energy:100};
 const powers={hidden:[['◉','Campo de fuerza',25],['◇','Desaparición',30],['✦','Señuelo',20]],seeker:[['◎','Radar',20],['◌','Visión',25],['ϟ','Pulso',30]]};
-function show(id){$$('.screen').forEach(x=>x.classList.add('hidden')); $('#'+id).classList.remove('hidden')}
+function show(id){$$('#app > section').forEach(x=>x.classList.add('hidden')); $('#'+id).classList.remove('hidden')}
 function code(){return Math.random().toString(36).slice(2,8).toUpperCase()}
 function enterLobby(){state.name=$('#name').value.trim().slice(0,18);if(!state.name)return $('#name').focus();localStorage.setItem('eter_name',state.name);$('#userPill').textContent=state.name;show('lobby')}
 $('#loginBtn').onclick=enterLobby;$('#name').addEventListener('keydown',e=>{if(e.key==='Enter')enterLobby()});
 $('#createBtn').onclick=()=>{state.room=code();$('#roomPill').textContent='Sala '+state.room;$('#roleHint').textContent='Compartí el código con quienes van a jugar.';show('role')};
 $('#joinBtn').onclick=()=>$('#joinBox').classList.toggle('hidden');$('#confirmJoin').onclick=()=>{const r=$('#room').value.trim().toUpperCase();if(r.length<4)return;state.room=r;$('#roomPill').textContent='Sala '+r;show('role')};
 $$('.role').forEach(b=>b.onclick=()=>{$$('.role').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');state.role=b.dataset.role;$('#startBtn').disabled=false});
-$('#startBtn').onclick=()=>{state.energy=100;$('#energy').textContent=100;$('#gameRoom').textContent='Sala '+state.room;$('#roleStatus').textContent=state.role==='seeker'?'◎ Buscador':'◈ Escondido';$('#gameTitle').textContent=state.role==='seeker'?'Detectá las señales y acercate al objetivo.':'Evitá al buscador y usá tus poderes para escapar.';$('#powers').innerHTML=powers[state.role].map((p,i)=>`<button class="power" data-cost="${p[2]}"><b>${p[0]} ${p[1]}</b><small>${p[2]} Éter</small></button>`).join('');$$('.power').forEach(b=>b.onclick=()=>{const cost=+b.dataset.cost;if(state.energy<cost){b.animate([{opacity:.4},{opacity:1}],{duration:250});return}state.energy-=cost;$('#energy').textContent=state.energy;b.disabled=true;b.querySelector('small').textContent='Usado';setTimeout(()=>{b.disabled=false;b.querySelector('small').textContent=cost+' Éter'},3500)});show('game')};
+$('#startBtn').onclick=()=>{state.energy=100;$('#energy').textContent=100;$('#gameRoom').textContent='Sala '+state.room;$('#roleStatus').textContent=state.role==='seeker'?'◎ Buscador':'◈ Escondido';$('#gameTitle').textContent=state.role==='seeker'?'Detectá las señales y acercate al objetivo.':'Evitá al buscador y usá tus poderes para escapar.';$('#powers').innerHTML=powers[state.role].map(p=>`<button class="power" data-cost="${p[2]}"><b>${p[0]} ${p[1]}</b><small>${p[2]} Éter</small></button>`).join('');$$('.power').forEach(b=>b.onclick=()=>{const cost=+b.dataset.cost;if(state.energy<cost)return;b.disabled=true;state.energy-=cost;$('#energy').textContent=state.energy;b.querySelector('small').textContent='Usado';setTimeout(()=>{b.disabled=false;b.querySelector('small').textContent=cost+' Éter'},3500)});show('game')};
 $('#leaveBtn').onclick=()=>{state.room='';state.role='';show('lobby')};$('#logout').onclick=()=>{localStorage.removeItem('eter_name');state.name='';$('#name').value='';show('login')};
-if(state.name){$('#userPill').textContent=state.name;show('lobby')}else show('login');
+$('#userPill').textContent=state.name;if(state.name)show('lobby');else show('login');
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script></body></html>
