@@ -1,0 +1,11 @@
+{
+  "name": "Éter",
+  "short_name": "Éter",
+  "description": "Juego móvil de proximidad",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#070b16",
+  "theme_color": "#070b16",
+  "lang": "es",
+  "orientation": "portrait"
+}
