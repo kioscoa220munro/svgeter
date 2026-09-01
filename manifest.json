@@ -1,11 +1,12 @@
 {
-  "name": "Éter",
-  "short_name": "Éter",
-  "description": "Juego móvil de proximidad",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#070b16",
-  "theme_color": "#070b16",
-  "lang": "es",
-  "orientation": "portrait"
+  "name":"Éter",
+  "short_name":"Éter",
+  "description":"Juego de persecución y proximidad",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#01050c",
+  "theme_color":"#020711",
+  "lang":"es",
+  "orientation":"portrait",
+  "categories":["games","entertainment"]
 }
