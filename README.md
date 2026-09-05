@@ -1,45 +1,40 @@
 # Éter
 
-Juego móvil de proximidad para jugar en el mundo real.
+Juego móvil de salas competitivas basado en Éter.
 
-## Concepto
+## Nueva dirección
 
-Éter convierte los teléfonos cercanos en parte de juegos físicos: escondidas, persecución, captura y futuras variantes.
+- Salas de **máximo 20 jugadores**.
+- Los jugadores se identifican por cuenta/email; el email no se muestra a otros jugadores.
+- Cada jugador puede tener una foto de avatar propia.
+- El avatar no cambia de personaje: evoluciona mediante **20 marcos visuales**.
+- Nivel 1–100; cada 5 niveles se desbloquea un marco.
+- Nivel 100 = **ÉTER ABSOLUTO · INMORTAL**.
+- Cada día el jugador recibe **100 Éter disponible**.
+- El Éter disponible se puede arriesgar en desafíos; el Éter histórico determina el progreso.
+- La ruleta selecciona enfrentamientos dentro de la sala.
+- El juego elegido debe ser compatible con el Éter disponible de ambos jugadores.
+- Los desafíos cortos arriesgan menos Éter; los largos permiten apuestas mayores.
+- El ganador obtiene el Éter apostado y el perdedor lo pierde.
+- La sala puede ordenar a sus jugadores por Éter final al terminar la competencia.
+- El avatar, su marco y su nivel son visibles para los demás jugadores.
+- La proximidad usa ubicación solo para detectar **concentración de Éter cercana**, no para mostrar posiciones exactas.
+- Indicador de proximidad: **BAJO / ALTO / EXTREMO**.
 
-## Principios
+## Catálogo inicial
 
-- **Offline durante la partida.** No depende de Internet.
-- Descargás la app, abrís, elegís rol y jugás.
-- Comunicación local entre teléfonos.
-- Roles: **Buscador** y **Escondido**.
-- Equipos: compañeros visibles en verde; enemigos en rojo.
-- Cada jugador comienza con **100 de Éter**.
-- Cada rol tiene **3 poderes**.
-- La proximidad se representa con partículas tipo píxel, semitonos y gradientes.
-- Nunca intentamos convertir la experiencia en un GPS exacto.
+Ta-Te-Ti, Reflejos, Tocar el objetivo, Piedra/Papel/Tijera, Memoria rápida, Quiz Éter, Conecta 4, Damas, Batalla naval, Truco y Éter Caos.
 
-## Primer prototipo
+La arquitectura del catálogo permite agregar nuevos minijuegos sin cambiar la economía, las salas, la ruleta o la progresión.
 
-1. Descubrimiento local de jugadores.
-2. Crear/unirse a una partida.
-3. Asignación de rol y equipo.
-4. Estado de compañero/enemigo.
-5. Energía Éter y poderes.
-6. Señales de proximidad y partículas.
-7. Confirmación de encuentro mediante proximidad/NFC/QR según disponibilidad.
+## Mobile-first
 
-## Poderes iniciales
+La interfaz está diseñada primero para celulares: viewport seguro, botones táctiles, tarjetas compactas, navegación inferior y layouts adaptables.
 
-### Escondido
-- Campo de fuerza
-- Desaparición
-- Señuelo
+## Estado actual
 
-### Buscador
-- Radar
-- Visión
-- Pulso
+El prototipo web ya contiene cuenta local por email, avatar por foto, economía diaria, progresión de niveles/marcos, catálogo, sala de 20, ruleta, desafíos jugables de prueba y detector de concentración.
 
-## Separación
+La sincronización multiusuario real y la autenticación persistente de servidor quedan como la siguiente capa de producción; no se simulan como si fueran datos reales.
 
-Este repositorio es completamente independiente de A220 y no comparte backend, datos ni infraestructura con sus aplicaciones.
+Éter es independiente de A220 y no comparte backend, datos ni infraestructura con A220.
