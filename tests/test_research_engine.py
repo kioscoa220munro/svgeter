@@ -1,11 +1,14 @@
 import unittest
 
+from null_models import generate
 from research_engine import (
     analyze_digits,
     analyze_lengths,
     clean_digits,
     first_unilateral_length,
+    summarize_null,
 )
+import random
 
 
 class ResearchEngineTests(unittest.TestCase):
@@ -38,8 +41,8 @@ class ResearchEngineTests(unittest.TestCase):
 
     def test_leading_zero_is_preserved(self):
         result = analyze_digits("001", "toy", 3, 2)
-        self.assertEqual(result.first_block, "00")  # palindrome is not unilateral
-        self.assertEqual(result.first_reverse, "")
+        self.assertEqual(result.first_block, "01")
+        self.assertEqual(result.first_reverse, "10")
         self.assertEqual(result.status, "UNILATERAL")
         self.assertEqual(result.unilateral, 1)
 
@@ -56,6 +59,25 @@ class ResearchEngineTests(unittest.TestCase):
         result = analyze_digits("123", "toy", 4, 2)
         self.assertEqual(result.status, "INSUFFICIENT_DATA")
         self.assertEqual(result.windows, 0)
+
+    def test_null_generators_are_reproducible(self):
+        a = generate("iid-uniform", random.Random(123), "314159", 40)
+        b = generate("iid-uniform", random.Random(123), "314159", 40)
+        self.assertEqual(a, b)
+        self.assertEqual(len(a), 40)
+
+    def test_markov_generators_return_requested_length(self):
+        source = "00112233445566778899" * 3
+        for model in ("iid-marginal", "markov1", "markov2"):
+            value = generate(model, random.Random(7), source, 100)
+            self.assertEqual(len(value), 100)
+            self.assertTrue(all("0" <= c <= "9" for c in value))
+
+    def test_null_summary_empirical_p(self):
+        summary = summarize_null([1, 2, 3, 3], 3)
+        self.assertEqual(summary["reps"], 4)
+        self.assertEqual(summary["p_ge"], 3 / 5)
+        self.assertEqual(summary["p_le"], 1 / 5)
 
 
 if __name__ == "__main__":
