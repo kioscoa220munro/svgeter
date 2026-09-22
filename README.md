@@ -1,50 +1,55 @@
-# Éter
+# Nazer π Lab
 
-Juego móvil de salas competitivas basado en Éter.
+Aplicación web experimental para estudiar bloques de dígitos y reversos en prefijos finitos de constantes matemáticas.
 
-## Identidad del jugador
+> El proyecto reemplaza el concepto original de Éter. El repositorio se conserva como contenedor del nuevo laboratorio.
 
-- Entrada prevista con **cuenta Google**: el jugador elige una cuenta y continúa sin escribir mail ni contraseña.
-- La cuenta Google es la identidad privada del jugador.
-- El **mail nunca se muestra** a otros jugadores.
-- La foto de Google se usa automáticamente como avatar.
-- La primera vez se solicita solamente un **nombre de jugador**, que sí es público.
-- Los demás jugadores ven nombre, avatar, rango, nivel, Éter y marco de evolución.
+## Funciones actuales
 
-## Progresión
+- Carga local de archivos TXT con dígitos de π, e, √2 y φ.
+- Selección del tamaño del prefijo `N`.
+- Selección de la longitud máxima `L`.
+- Modo de búsqueda del primer `L` unilateral.
+- Modo de análisis de todas las longitudes hasta `L_MAX`.
+- Detección de bloques `S` cuyo reverso `Sᴿ` no aparece en el mismo prefijo.
+- Selección reproducible del bloque unilateral lexicográficamente menor.
+- Tabla de resultados con ventanas, bloques distintos, unilaterales, bloque y reverso.
+- Funcionamiento local en el navegador, sin Supabase ni backend.
 
-- Salas de máximo **20 jugadores**.
-- Cada día: **100 Éter disponible**.
-- Nivel 1–100.
-- 20 marcos visuales; cada 5 niveles cambia el marco.
-- Nivel 100 = **ÉTER ABSOLUTO · INMORTAL**.
-- Rangos públicos ligados al progreso.
-- El avatar no cambia: evoluciona mediante el marco que lo rodea.
+## Definición
 
-## Competencia
+Para un prefijo de longitud `N`, sea `B_N^(L)` el conjunto de bloques de longitud `L` presentes en ese prefijo. La app comprueba si:
 
-- La ruleta selecciona dos jugadores de la sala.
-- Después se selecciona un minijuego compatible con el Éter disponible de ambos.
-- Los juegos cortos permiten apuestas pequeñas; los largos, apuestas mayores.
-- Nunca se debe permitir una apuesta superior al Éter disponible de cualquiera de los dos jugadores.
-- La economía definitiva debe ser validada por servidor para evitar trampas.
+```text
+S ∈ B_N^(L)  =>  reverse(S) ∈ B_N^(L)
+```
 
-## Catálogo inicial
+El resultado es una propiedad del prefijo finito. No demuestra normalidad, disyuntividad, reversibilidad o irreversibilidad de la expansión infinita de una constante.
 
-Ta-Te-Ti, Reflejos, Tocar el objetivo, Piedra/Papel/Tijera, Memoria rápida, Quiz Éter, Conecta 4, Damas, Batalla naval, Truco y Éter Caos.
+## Uso
 
-## Proximidad
+1. Abrir `index.html` mediante GitHub Pages o un servidor local.
+2. Cargar uno o varios archivos TXT con los dígitos.
+3. Elegir `N`, `L máximo` y el modo.
+4. Ejecutar el análisis.
 
-El detector puede mostrar concentración aproximada de Éter cercana: **BAJO / ALTO / EXTREMO**. No muestra posiciones exactas ni el mail de nadie.
+## Archivos esperados
 
-## Diseño
+Los nombres pueden ser, por ejemplo:
 
-La interfaz 2.1 fue rediseñada mobile-first con estética de energía/ciencia ficción: fondo profundo, vidrio oscuro, neón, gradientes, tarjetas compactas, avatar con marco vivo y navegación inferior.
+```text
+pi_digits.txt
+e_digits.txt
+sqrt2_digits.txt
+phi_digits.txt
+```
 
-## Estado técnico
+La aplicación elimina todos los caracteres que no sean dígitos ASCII.
 
-`index.html` ya está preparado para autenticación Google mediante Supabase Auth usando una clave publishable y para asociar el jugador a `auth.users.id`. El código no guarda contraseñas.
+## Próximas mejoras
 
-Para producción todavía hay que conectar el proyecto Supabase **exclusivo de Éter**, habilitar Google como proveedor OAuth y crear la tabla de jugadores con sus políticas RLS. No se debe reutilizar el backend de A220.
-
-Éter es independiente de A220 y no comparte backend, datos ni infraestructura con A220.
+- Exportación CSV desde la interfaz.
+- Comparación automática de `L* - log10(N)`.
+- Modelo nulo aleatorio y réplicas Monte Carlo.
+- Gráficos de cobertura por longitud.
+- Procesamiento con Web Worker para evitar bloquear la interfaz en prefijos grandes.
