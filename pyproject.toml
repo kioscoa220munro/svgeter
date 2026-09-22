@@ -1,0 +1,9 @@
+[project]
+name = "nazer-pi-lab"
+version = "1.0.0"
+description = "Finite-prefix reversibility experiments for digit sequences"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
