@@ -1,12 +1,11 @@
 {
-  "name":"Éter",
-  "short_name":"Éter",
-  "description":"Juego de persecución y proximidad",
-  "start_url":"./",
+  "name":"Imagen 4D",
+  "short_name":"Imagen 4D",
+  "description":"Reconstrucción espacial navegable desde video",
+  "start_url":"./imagen4d.html",
   "display":"standalone",
-  "background_color":"#01050c",
-  "theme_color":"#020711",
+  "background_color":"#03070d",
+  "theme_color":"#03070d",
   "lang":"es",
-  "orientation":"portrait",
-  "categories":["games","entertainment"]
+  "orientation":"landscape"
 }
