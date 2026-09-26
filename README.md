@@ -1,73 +1,16 @@
-# Nazer π Lab
+# Imagen 4D
 
-Laboratorio reproducible para estudiar bloques de dígitos y sus reversos en **prefijos finitos** de secuencias numéricas. El repositorio fue reconvertido desde el concepto original de Éter.
+Aplicación para reconstruir un lugar a partir de video y representarlo como un mundo espacial navegable con una dimensión temporal.
 
-> **Alcance:** una observación en un prefijo finito no demuestra por sí sola qué ocurre en la expansión infinita de una constante. El proyecto separa explícitamente observación computacional, evidencia estadística y demostración matemática.
+## Flujo
+Video/cámara → muestreo → estructura espacial estimada → nube 3D → navegación → línea temporal.
 
-## Componentes
+El visor usa Three.js y permite orbitar, hacer zoom y desplazar la cámara. El motor actual es una reconstrucción ligera de navegador: estima profundidad monocular y fusiona muestras temporales. No pretende sustituir todavía un sistema de reconstrucción 4D de GPU como 4D Gaussian Splatting.
 
-- `index.html`: aplicación web con Web Worker, CSV y JSON.
-- `research_worker.js`: análisis sin bloquear la interfaz.
-- `research_engine.py`: motor exacto con codificación entera de ventanas.
-- `research_runner.py`: CLI para análisis observado y Monte Carlo.
-- `null_models.py`: IID uniforme, IID marginal, Markov-1 y Markov-2.
-- `prepare_constants.py`: prepara archivos reproducibles de π, e, √2 y φ mediante `mpmath`.
-- `tests/`: pruebas unitarias y comparación contra una implementación de referencia.
-- `RESEARCH_PROTOCOL.md`: protocolo científico.
-- `REPORT_TEMPLATE.md`: plantilla de informe.
-- `.github/workflows/test.yml`: pruebas automáticas.
-- `.github/workflows/smoke-research.yml`: experimento de humo reproducible.
+## Archivos principales
+- `imagen4d.html`: interfaz.
+- `imagen4d.js`: visor 3D y captura.
+- `imagen4d_worker.js`: reconstrucción espacial en Web Worker.
+- `imagen4d.css`: interfaz.
 
-## Preparar datos piloto
-
-Instalar dependencias:
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-Crear 100.000 dígitos por constante:
-
-```bash
-python prepare_constants.py --n 100000 --output-dir data
-```
-
-Esto crea:
-
-```text
-data/pi_digits.txt
-data/e_digits.txt
-data/sqrt2_digits.txt
-data/phi_digits.txt
-data/manifest.json
-```
-
-El manifiesto registra el tamaño solicitado, versión de `mpmath` y SHA-256 de cada secuencia limpia. Para estudios de escala extrema, conservar además una fuente independiente de alta precisión y comparar hashes.
-
-## Ejecutar análisis
-
-```bash
-python research_runner.py \
-  --data-dir data \
-  --n 1000 10000 100000 \
-  --l-max 15 \
-  --all-lengths \
-  --null-reps 1000 \
-  --null-model iid-uniform \
-  --seed 220 \
-  --output research_results.csv
-```
-
-Modelos disponibles: `iid-uniform`, `iid-marginal`, `markov1` y `markov2`.
-
-## Interpretación
-
-Unilateral significa que el bloque aparece y su reverso no aparece **dentro del mismo prefijo analizado**. No demuestra que el reverso no aparezca más adelante en la expansión infinita. Los p-valores son empíricos, dependen de la semilla y del número de réplicas, y no constituyen una demostración matemática.
-
-## Pruebas
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-El workflow `smoke-research.yml` prepara 1.000 dígitos por constante y ejecuta una comparación pequeña con modelos nulos para detectar fallos de integración.
+El objetivo siguiente es reemplazar la estimación ligera por poses de cámara + profundidad/gaussian splatting para conseguir una reconstrucción geométrica más fiel.
