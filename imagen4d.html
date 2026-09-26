@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Imagen 4D</title><link rel="stylesheet" href="./imagen4d.css"></head>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Imagen 4D · Mundo espacio-tiempo</title><link rel="stylesheet" href="./imagen4d.css"></head>
 <body><main>
-<header><div><div class="brand">IMAGEN 4D</div><div class="tag">TODOS LOS SENTIDOS · ESPACIO–TIEMPO</div></div></header>
-<section class="hero"><div><h1>Capturá un mundo 4D.</h1><p>Usá la cámara en vivo o cargá un video anterior. El motor combina imagen, movimiento, profundidad estimada, tiempo y sensores disponibles.</p></div>
+<header><div><div class="brand">IMAGEN 4D</div><div class="tag">MUNDO ESPACIO–TIEMPO · RECONSTRUCCIÓN 3D</div></div></header>
+<section class="hero"><div><h1>Construí un mundo en el que puedas moverte.</h1><p>Cargá un video o usá la cámara. El motor convierte los fotogramas en una nube espacial navegable y conserva el tiempo para explorar cómo cambia el lugar.</p></div>
 <div class="inputs"><button id="live">📷 Cámara en vivo</button><label class="upload">🎞️ Cargar video<input id="videoFile" type="file" accept="video/*"></label></div></section>
-<section class="grid"><aside class="panel"><h2>Sensores</h2><div id="senses">Cámara · movimiento · tiempo · eco sensorial</div><div id="status" class="status">Elegí cámara o video.</div><button id="run" disabled>Generar mundo 4D</button><div class="stats" id="stats"></div></aside>
-<section><div class="viewer"><canvas id="world"></canvas><video id="video" muted playsinline></video></div><div class="timeline"><button id="play">▶</button><input id="time" type="range" min="0" max="1" step=".01" value="0"><span id="clock">0.0 / 0.0 s</span></div><div class="panel"><h2>Campo 4D</h2><div id="events" class="events">Esperando captura.</div></div></section></section></main>
+<section class="grid"><aside class="panel"><h2>Captura</h2><div id="senses">Cámara · movimiento · tiempo</div><div id="status" class="status">Elegí cámara o video.</div><button id="run" disabled>🌐 Construir mundo 4D</button><div class="stats" id="stats"></div><div class="note">Navegación: arrastrá para mirar alrededor · rueda/pellizco para acercar · botón derecho para desplazar.</div></aside>
+<section><div class="viewer"><canvas id="world"></canvas><video id="video" muted playsinline></video><div class="viewerHint">ARRASTRÁ · ZOOM · DESPLAZÁ</div></div><div class="timeline"><button id="play">▶</button><input id="time" type="range" min="0" max="1" step=".01" value="0"><span id="clock">0.0 / 0.0 s</span></div><div class="panel"><h2>Espacio–tiempo</h2><div id="events" class="events">Esperando captura.</div></div></section></section></main>
 <script type="module" src="./imagen4d.js"></script></body></html>
