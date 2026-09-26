@@ -32,11 +32,10 @@ function resize3D(){
 function animate(){
   requestAnimationFrame(animate);
   controls?.update();
-  if(points&&report?.timeline?.length){
+  if(points&&pointMaterial?.uniforms){
     const t=video.currentTime||0;
-    const attr=pointGeometry.getAttribute('aTime');
-    if(attr){for(let i=0;i<attr.count;i++)attr.array[i*1]=attr.array[i];}
-    points.material.opacity=.92;
+    pointMaterial.uniforms.uTime.value=t;
+    pointMaterial.uniforms.uWindow.value=Math.max(.45,(report?.duration||video.duration||1)*.12);
   }
   renderer?.render(scene,camera);
 }
@@ -51,7 +50,12 @@ function buildWorld(r){
   pointGeometry.setAttribute('color',new THREE.BufferAttribute(col,3));
   pointGeometry.setAttribute('aTime',new THREE.BufferAttribute(times,1));
   pointGeometry.computeBoundingSphere();
-  pointMaterial=new THREE.PointsMaterial({size:.018,vertexColors:true,sizeAttenuation:true,transparent:true,opacity:.95,depthWrite:false});
+  pointMaterial=new THREE.ShaderMaterial({
+  uniforms:{uTime:{value:0},uWindow:{value:1}},
+  vertexColors:true,transparent:true,depthWrite:false,
+  vertexShader:`attribute float aTime; varying vec3 vColor; varying float vTime; void main(){vColor=color;vTime=aTime;vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=max(1.5,18.0/-mv.z);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float uTime; uniform float uWindow; varying vec3 vColor; varying float vTime; void main(){float d=abs(vTime-uTime);float fade=1.0-smoothstep(uWindow,uWindow*1.8,d);if(fade<.02)discard;vec2 p=gl_PointCoord-.5;if(dot(p,p)>.25)discard;gl_FragColor=vec4(vColor,fade);}`
+});
   points=new THREE.Points(pointGeometry,pointMaterial);
   scene.add(points);
   const box=new THREE.Box3().setFromBufferAttribute(pointGeometry.getAttribute('position'));
@@ -62,7 +66,7 @@ function buildWorld(r){
   controls.target.set(0,0,0);camera.position.set(0,0,3.2);controls.update();
 }
 function reportDone(r){
-  report=r;
+  report=r;report.duration=Number(video.duration)||r.duration||1;
   $('stats').innerHTML=[['Fotogramas',r.samples],['Cambios',r.events],['Movimiento',r.motion.toFixed(2)],['Estructura',r.edge.toFixed(2)],['Puntos 3D',Math.round(r.points/3)]]
     .map(x=>'<div class="stat"><small>'+x[0]+'</small><b>'+x[1]+'</b></div>').join('');
   $('events').textContent='Mundo espacial generado · '+r.samples+' instantes · usá un dedo/ratón para orbitar, pellizcá/rueda para zoom.';
@@ -137,6 +141,6 @@ $('run').onclick=async()=>{
 };
 $('play').onclick=()=>video.paused?video.play():video.pause();
 video.ontimeupdate=()=>{if(Number.isFinite(video.duration)&&video.duration>0){$('time').value=video.currentTime;$('clock').textContent=video.currentTime.toFixed(1)+' / '+video.duration.toFixed(1)+' s'}};
-$('time').oninput=e=>{if(!video.srcObject)video.currentTime=+e.target.value};
+$('time').oninput=e=>{const t=+e.target.value;if(!video.srcObject)video.currentTime=t;if(pointMaterial?.uniforms)pointMaterial.uniforms.uTime.value=t;};
 window.onresize=resize3D;
 init3D();
