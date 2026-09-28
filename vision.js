@@ -17,7 +17,7 @@ export async function analyzeFrame(c,engine,state){
   const faceResult=await engine.faces.estimateFaces(c,{flipHorizontal:false});
   const faces=(faceResult||[]).map((f,i)=>({id:i,bbox:[f.box.xMin,f.box.yMin,f.box.width,f.box.height],conf:f.score??1}));
   const ret=await engine.ocr.recognize(c,{rectangle:{left:0,top:0,width:c.width,height:c.height}},{blocks:true});
-  const text=(ret.data.blocks||[]).flatMap(b=>(b.paragraphs||[]).flatMap(p=>(p.lines||[]).map(l=>({text:l.text.trim(),bbox:l.bbox||null,conf:(l.confidence||0)/100})).filter(x=>x.text)));
+  const text=(ret.data.blocks||[]).map(b=>({text:String(b.text||"").trim(),bbox:b.bbox||null,conf:(b.confidence||0)/100})).filter(x=>x.text);
   const plates=text.filter(x=>plateCandidate(x.text)).map(x=>({...x,kind:"plate_candidate"}));
   return {objects:tracked,faces,text,plates};
 }
