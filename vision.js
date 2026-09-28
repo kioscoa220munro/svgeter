@@ -1,6 +1,6 @@
-import * as cocoSsd from "@tensorflow-models/coco-ssd";
-import * as faceDetection from "@tensorflow-models/face-detection";
-import { createWorker } from "tesseract.js";
+import * as cocoSsd from "https://esm.sh/@tensorflow-models/coco-ssd@2.2.3";
+import * as faceDetection from "https://esm.sh/@tensorflow-models/face-detection@1.0.3";
+import { createWorker } from "https://esm.sh/tesseract.js@6.0.1";
 
 export async function createVision(){
   const [objects,faces,ocr]=await Promise.all([
